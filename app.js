@@ -24,80 +24,77 @@
 
     // Create the Team Name:
         function teamTitle() {
-            inquirer.prompt([
+            return inquirer.prompt([
                 {
                     type: "input",
                     name: "myTeam",
                     message: "What is the name of your team?"
-                    
                 }
-            ])  
+            ]);
         };
 
     // Now input employees and their information. This function will keep repeating until all employees have been added to the Array called TeamArray:
         function inputEmployees() {
-            inquirer.prompt([
-               
-               {
-                    type: "list" ,
-                    name: "employeeClass" ,
-                    message: "What is the employee's role on the team?",
-                    choices: [
-                        "Manager",
-                        "Engineer",
-                        "Intern"
-                    ]
-               }, 
-               {
-                type: "input",
-                name: "employeeName",
-                message: "What is the name of the employee?"   
-                    
-               },
-               {
-                type: "input" ,
-                name: "employeeID",
-                message: "What is the ID of the employee?"  
-               },
-               {
-                type: "input",
-                name: "employeeEmail",
-                message: "What is the email address of the employee?"
-               },
-               {
-                type: "input", 
-                name: "officeNumber",
-                message: "What is the office number of the manager?",
-                when: (userInput) => userInput.employeeClass == "Manager"
-               },
-               {
-                type: "input",
-                name: "github",
-                message: "What is the employee's Github username?",
-                when: (userInput) => userInput.employeeClass == "Engineer"
-               },
-               {
-                type: "input" ,
-                name: "school",
-                message: "What School is this employee attending or has attended?",
-                when: (userInput) => userInput.employeeClass == "Intern"  
-               },
-            ])
+            return inquirer.prompt(
+                [
+                    {
+                        type: "list",
+                        name: "employeeClass",
+                        message: "What is the employee's role on the team?",
+                        choices: [
+                            "Manager",
+                            "Engineer",
+                            "Intern"
+                        ] 
+                    },
+                    {
+                        type: "input",
+                        name: "employeeName",
+                        message: "What is the name of the employee?"
+                    },
+                    {
+                        type: "input",
+                        name: "employeeID",
+                        message: "What is the ID Number of the employee?"
+                    },
+                    {
+                        type: "input",
+                        name: "employeeEmail",
+                        message: "What is the email address of the employee?"
+                    },
+                    {
+                        type: "input",
+                        name: "officeNumber",
+                        message: "What is the manager's office number?",
+                        when: (userInput) => userInput.employeeClass == "Manager"
+                    },
+                    {
+                        type: "input",
+                        name: "github",
+                        message: "What is this Engineer's Github username?",
+                        when: (userInput) => userInput.employeeClass == "Engineer"
+                    },
+                    {
+                        type: "input",
+                        name: "school",
+                        message: "What school is this intern attending?",
+                        when: (userInput) => userInput.employeeClass == "Intern"
+                    },
+
+                ]);
+            
+            
         };
-
-
-
-
-
-    
-
-
 
 
 // function to initialize program
 async function init() {
     try {
-        
+        //Initialize function to create an employee:
+        const employeeObject = await inputEmployees();
+        const teamName = await teamTitle();
+        console.log(employeeObject); 
+        console.log(teamName); 
     } 
     catch(err) {
         console.log(err);
