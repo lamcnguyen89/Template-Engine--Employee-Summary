@@ -30,8 +30,7 @@ function callRender() {
         console.log('file generated')
     })
 }
-
-  
+ 
 // Write code to use inquirer to gather information about team members. This code creates a prompt where user can input information about the employees on the team. 
 // The team member information will be pushed into an empty array called teamArray. 
 // Once all the team members have been added to the array, the array will then be used in the callRender() function to generate the HTML containing a graphical representation of team members.
@@ -93,30 +92,41 @@ function inputEmployees() {
                 answers => {
 
                     // Create code that creates a new employee object based off the employee class and pushes it to the teamArray.
-                    if (answers.employeeClass == "Manager") {
-                        const employee = new Manager(answers.employeeName, answers.employeeID, answers.employeeEmail, answers.officeNumber)
-                        teamArray.push(employee)                           
-                    } else if (answers.employeeClass == "Engineer") {
-                        const employee = new Engineer(answers.employeeName, answers.employeeID, answers.employeeEmail, answers.github)
-                        teamArray.push(employee)  
-                    } else {
-                        const employee = new Intern(answers.employeeName, answers.employeeID, answers.employeeEmail, answers.school)
-                        teamArray.push(employee)
-                    }
+                    switch(answers.employeeClass){
 
+                        case "Manager" :
+                            teamArray.push(new Manager(answers.employeeName, answers.employeeID, answers.employeeEmail, answers.officeNumber));
+                            break;
+
+                        case "Engineer" :
+                            teamArray.push(new Engineer(answers.employeeName, answers.employeeID, answers.employeeEmail, answers.github));
+                            break;
+                        
+                        case "Intern" : 
+                            teamArray.push(new Intern(answers.employeeName, answers.employeeID, answers.employeeEmail, answers.school));
+                            break;
+                        
+                    };
+                   
                     // This  code will make it so that the function inputEmployees() will repeat as long as the user still has employees to input into the roster.
-                    if (answers.newEmployee) {
-                        // Will use a concept called recursion where the function calls itself in an infinite loop until another condition is met:
-                        inputEmployees();
-                    } else {
-                        // If no more employees need to be input, render the Array that contains all the Team information into an HTML file:
-                        callRender();
-                    }
-                }   
-            );
+                    switch(answers.newEmployee){
+
+                        case true :
+                            // Will use a concept called recursion where the function calls itself in an infinite loop until another condition is met:
+                            inputEmployees();
+                            break;
+                        
+                        default : 
+                            // If no more employees need to be input, render the Array that contains all the Team information into an HTML file:
+                            callRender()
+
+                    };
+
+                });   
+            
 };
 
-// Initialize the inputEmployees function which will get the program running:
+// Initialize the function to input employees which will get the program running:
 inputEmployees()
  
         
