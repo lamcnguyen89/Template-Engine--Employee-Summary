@@ -20,6 +20,11 @@
     // Create empty array in which to push team member data:
     const teamArray = [];
 
+    // Empty Variable for team title:
+    let teamName;
+
+    
+
 // Write code to use inquirer to gather information about the development team members:
 
         // Create the Team Name:
@@ -30,7 +35,10 @@
                         name: "myTeam",
                         message: "What is the name of your team?"
                     }
-                ]);
+                ]).then(answers => {
+                    teamName = answers.myTeam;
+                    return teamName; 
+                });
             };
 
         // Now input employees and their information. This function will keep repeating until all employees have been added to the Array called TeamArray:
@@ -80,8 +88,40 @@
                             message: "What school is this intern attending?",
                             when: (userInput) => userInput.employeeClass == "Intern"
                         },
+                        {
+                            type: "confirm",
+                            name: "newEmployee",
+                            message: "Would you like to add another employee to the roster?"
+                        }
 
-                    ]);
+                    ]).then( 
+                        answers => {
+                            // Create code that creates a new employee object based off the employee class and pushes it to the teamArray.
+                            if (answers.employeeClass == "Manager") {
+                                const employee = new Manager(answers.employeeName, answers.employeeID, answers.employeeEmail, answers.officeNumber)
+                                teamArray.push(employee)                           
+                            } else if (answers.employeeClass == "Engineer") {
+                                const employee = new Engineer(answers.employeeName, answers.employeeID, answers.employeeEmail, answers.github)
+                                teamArray.push(employee)  
+                            } else {
+                                const employee = new Intern(answers.employeeName, answers.employeeID, answers.employeeEmail, answers.school)
+                                teamArray.push(employee)
+                            }
+
+                            // This  code will make it so that the function inputEmployees() will repeat as long as the user still has employees to input into the roster. 
+                            if (answers.newEmployee) {
+                               // Will use recursion where the function calls on itself.
+                               console.log(teamArray);
+                                inputEmployees();
+                            } else {
+                                // If no more employees need to be input, call the function for the teamTitle to add to preexisting variable, the name of the team.
+                                teamTitle();
+                                // return teamArray;
+                                return teamArray;
+                            }
+                        }
+                        
+                    );
                 
                 
             };
@@ -92,7 +132,6 @@ async function init() {
     try {
         //Initialize function to create an employee:
         const employeeObject = await inputEmployees();
-        const teamName = await teamTitle();
         
     } 
     catch(err) {
