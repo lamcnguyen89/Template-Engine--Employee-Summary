@@ -20,29 +20,11 @@
     // Create empty array in which to push team member data:
     const teamArray = [];
 
-    // Empty Variable for team title:
-    let teamName;
-
-    
-
+  
 // Write code to use inquirer to gather information about the development team members:
 
-        // Create the Team Name:
-            function teamTitle() {
-                return inquirer.prompt([
-                    {
-                        type: "input",
-                        name: "myTeam",
-                        message: "What is the name of your team?"
-                    }
-                ]).then(answers => {
-                    teamName = answers.myTeam;
-                    return teamName; 
-                });
-            };
-
-        // Now input employees and their information. This function will keep repeating until all employees have been added to the Array called TeamArray:
-            function inputEmployees() {
+        // Input employees and their information. This function will keep repeating until all employees have been added to the Array called TeamArray:
+          function inputEmployees() {
                 return inquirer.prompt(
                     [
                         {
@@ -96,6 +78,7 @@
 
                     ]).then( 
                         answers => {
+
                             // Create code that creates a new employee object based off the employee class and pushes it to the teamArray.
                             if (answers.employeeClass == "Manager") {
                                 const employee = new Manager(answers.employeeName, answers.employeeID, answers.employeeEmail, answers.officeNumber)
@@ -108,60 +91,31 @@
                                 teamArray.push(employee)
                             }
 
-                            // This  code will make it so that the function inputEmployees() will repeat as long as the user still has employees to input into the roster. 
+                            // This  code will make it so that the function inputEmployees() will repeat as long as the user still has employees to input into the roster.
                             if (answers.newEmployee) {
-                               // Will use recursion where the function calls on itself.
-                               console.log(teamArray);
+                                // Will use a concept called recursion where the function calls itself in an infinite loop until another condition is met:
                                 inputEmployees();
                             } else {
-                                // If no more employees need to be input, call the function for the teamTitle to add to preexisting variable, the name of the team.
-                                teamTitle();
-                                // return teamArray;
-                                return teamArray;
+                                // If no more employees need to be input, Render the Array that contains all the Team information into an HTML file:
+                                callRender();
                             }
-                        }
-                        
+                        }   
                     );
-                
-                
             };
 
-
-// function to initialize program
-async function init() {
-    try {
-        //Initialize function to create an employee:
-        const employeeObject = await inputEmployees();
-        
-    } 
-    catch(err) {
-        console.log(err);
-    }
+// Function to generate HTML from the Team Array after it has been populated by the employee data:
+function callRender() {
+        const renderHTML = render(teamArray);
+        fs.writeFile(outputPath, renderHTML, (err)=>{
+            console.log('file generated')
+        })
 }
 
-// function call to initialize program
-init();
-
+// Initialize the inputEmployees function which will get the program running:
+inputEmployees()
  
         
 
 
 
 
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
